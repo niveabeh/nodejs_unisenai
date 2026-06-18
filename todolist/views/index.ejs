@@ -4,7 +4,7 @@
 <head>
     <meta charset='UTF-8'>
     <title>TodoList</title>
-    <link rel='stylesheet' href='../public/style.css'>
+    <link rel='stylesheet' href='/style.css'>
     <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11' defer></script>
 </head>
 
@@ -20,8 +20,10 @@
         <% for (let i=0; i < lista.length; i++) { %>
             <li>
                 <%= lista[i] %>
-                    <form action='/deletar/<%= i %>' method='POST' style='display:inline'>
-                        <button type='submit'>X</button>
+                    <form id="form-<%= i %>" action='/deletar/<%= i %>' method='POST' style='display:inline'>
+                        <button type='button' class='btn-deletar' data-id='<%= i %>'>
+                            X
+                        </button>
                     </form>
             </li>
             <% } %>
@@ -29,20 +31,24 @@
 
 
     <script>
-        function confirmarDelecao(id) {
-            Swal.fire({
-                title: 'Tem certeza?',
-                text: 'Esta tarefa será removida!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sim, deletar!',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('form-' + id).submit();
-                }
+        document.querySelectorAll('.btn-deletar').forEach(botao => {
+            botao.addEventListener('click', () => {
+                const id = botao.dataset.id;
+
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: 'Esta tarefa será removida!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, deletar!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(`form-${id}`).submit();
+                    }
+                });
             });
-        }
+        });
     </script>
 </body>
 
